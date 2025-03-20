@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <%- include('partials/head', { page: 'blog' }) %>
+  <title>ReadingBook - Blog</title>
+  <link rel="stylesheet" href="/css/blog.css">
+  <style>
+    /* Bổ sung CSS inline để cải thiện giao diện */
+    .blog-header {
+      background: linear-gradient(135deg, #7209b7, #3a0ca3);
+      padding: 5rem 0;
+      position: relative;
+      border-radius: 0 0 30% 30% / 50px;
+    }
+    
+    .blog-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('/uploads/common/pattern.svg');
+      background-repeat: repeat;
+      opacity: 0.1;
+    }
+    
+    .blog-header h1 {
+      font-size: 3.5rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    
+    .blog-search {
+      max-width: 600px;
+      margin: 0 auto;
+      position: relative;
+      margin-top: 2rem;
+    }
+    
+    .blog-search input {
+      width: 100%;
+      padding: 1rem 1.5rem;
+      border-radius: 50px;
+      border: none;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      font-size: 1rem;
+    }
+    
+    .blog-search button {
+      position: absolute;
+      right: 5px;
+      top: 5px;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+    }
+    
+    .blog-categories {
+      background-color: white;
+      border-radius: 10px;
+      padding: 2rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      margin-bottom: 2rem;
+    }
+    
+    .category-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    
+    .category-pill {
+      padding: 0.5rem 1.5rem;
+      background-color: #f8f9fa;
+      border-radius: 50px;
+      color: #333;
+      font-weight: 500;
+      transition: all 0.3s;
+      text-decoration: none;
+    }
+    
+    .category-pill:hover, .category-pill.active {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .blog-list {
+      padding: 3rem 0;
+    }
+    
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 30px;
+    }
+    
+    .blog-card {
+      border-radius: 12px;
+      overflow: hidden;
+      background: white;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .blog-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .blog-img-container {
+      position: relative;
+      overflow: hidden;
+      height: 220px;
+    }
+    
+    .blog-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+    
+    .blog-card:hover .blog-img {
+      transform: scale(1.05);
+    }
+    
+    .blog-category {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background-color: var(--primary-color);
+      color: white;
+      padding: 5px 15px;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      z-index: 1;
+    }
+    
+    .blog-info {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+    
+    .blog-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      line-height: 1.4;
+    }
+    
+    .blog-title a {
+      color: #333;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    
+    .blog-title a:hover {
+      color: var(--primary-color);
+    }
+    
+    .blog-excerpt {
+      color: #666;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      flex-grow: 1;
+    }
+    
+    .blog-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 1rem;
+      border-top: 1px solid #f1f1f1;
+      font-size: 0.85rem;
+      color: #777;
+    }
+    
+    .blog-author {
+      display: flex;
+      align-items: center;
+    }
+    
+    .blog-author img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+    
+    .blog-stats {
+      display: flex;
+      align-items: center;
+    }
+    
+    .blog-stats span {
+      display: flex;
+      align-items: center;
+      margin-left: 15px;
+    }
+    
+    .blog-stats i {
+      margin-right: 5px;
+    }
+    
+    .featured-section {
+      margin-bottom: 4rem;
+    }
+    
+    .section-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      position: relative;
+      display: inline-block;
+      padding-bottom: 10px;
+    }
+    
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 60%;
+      height: 4px;
+      background: var(--primary-color);
+      border-radius: 10px;
+    }
+    
+    .featured-post {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+    
+    .featured-img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+    }
+    
+    .featured-content {
+      padding: 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .featured-badge {
+      display: inline-block;
+      background-color: #ffedd8;
+      color: #ff8a00;
+      padding: 5px 15px;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    
+    .featured-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      line-height: 1.3;
+    }
+    
+    .featured-title a {
+      color: #333;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    
+    .featured-title a:hover {
+      color: var(--primary-color);
+    }
+    
+    .featured-excerpt {
+      color: #666;
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+    
+    .featured-btn {
+      display: inline-block;
+      background-color: var(--primary-color);
+      color: white;
+      padding: 0.75rem 2rem;
+      border-radius: 50px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s;
+      align-self: flex-start;
+    }
+    
+    .featured-btn:hover {
+      background-color: var(--secondary-color);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .newsletter-section {
+      background: linear-gradient(135deg, #7209b7, #560bad);
+      padding: 4rem 0;
+      border-radius: 15px;
+      margin: 4rem 0;
+      text-align: center;
+      color: white;
+    }
+    
+    .newsletter-section h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    
+    .newsletter-section p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      margin-bottom: 2rem;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .newsletter-form {
+      max-width: 500px;
+      margin: 0 auto;
+      position: relative;
+    }
+    
+    .newsletter-input {
+      width: 100%;
+      padding: 1rem 1.5rem;
+      border-radius: 50px;
+      border: none;
+      font-size: 1rem;
+      padding-right: 7rem;
+    }
+    
+    .newsletter-btn {
+      position: absolute;
+      right: 5px;
+      top: 5px;
+      background: var(--secondary-color);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    
+    @media (max-width: 992px) {
+      .featured-post {
+        grid-template-columns: 1fr;
+      }
+      
+      .featured-img {
+        height: 300px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .blog-header h1 {
+        font-size: 2.5rem;
+      }
+      
+      .featured-content {
+        padding: 2rem;
+      }
+      
+      .featured-title {
+        font-size: 1.5rem;
+      }
+      
+      .blog-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <%- include('partials/navbar') %>
+
+  <!-- Header Section -->
+  <section class="blog-header text-center">
+    <div class="container">
+      <% if (locals.isSearchResult && locals.searchQuery) { %>
+        <h1 class="fade-in">Kết quả tìm kiếm: "<%= searchQuery %>"</h1>
+        <p class="fade-in"><a href="/blog" class="btn btn-outline-light mt-2">Quay lại tất cả bài viết</a></p>
+      <% } else { %>
+        <h1 class="fade-in">Blog ReadingBook</h1>
+        <p class="fade-in">Chia sẻ kinh nghiệm, kiến thức và cảm nhận về sách</p>
+      <% } %>
+      
+      <!-- Thanh tìm kiếm -->
+      <div class="blog-search">
+        <form action="/blog/search" method="GET">
+          <input type="text" name="query" placeholder="Tìm kiếm bài viết..." value="<%= locals.searchQuery || '' %>">
+          <button type="submit">Tìm kiếm</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Danh mục -->
+  <div class="container mt-n5">
+    <div class="blog-categories">
+      <div class="category-pills">
+        <a href="/blog" class="category-pill active">Tất cả</a>
+        <a href="/blog?category=review" class="category-pill">Review sách</a>
+        <a href="/blog?category=tips" class="category-pill">Kỹ năng đọc sách</a>
+        <a href="/blog?category=author" class="category-pill">Tác giả nổi tiếng</a>
+        <a href="/blog?category=news" class="category-pill">Tin tức sách</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bài viết nổi bật -->
+  <section class="featured-section">
+    <div class="container">
+      <h2 class="section-title">Bài viết nổi bật</h2>
+      
+      <% if (posts && posts.length > 0) { %>
+        <div class="featured-post">
+          <img src="<%= posts[0].image %>" alt="<%= posts[0].title %>" class="featured-img">
+          <div class="featured-content">
+            <span class="featured-badge">Nổi bật</span>
+            <h3 class="featured-title">
+              <a href="/blog/<%= posts[0]._id %>"><%= posts[0].title %></a>
+            </h3>
+            <p class="featured-excerpt">
+              <%= posts[0].excerpt || posts[0].content.substring(0, 150) + '...' %>
+            </p>
+            <div class="blog-meta mb-4">
+              <div class="blog-author">
+                <img src="/uploads/users/default-avatar.jpg" alt="Author">
+                <span><%= posts[0].author %></span>
+              </div>
+              <div class="blog-stats">
+                <span><i class="far fa-calendar"></i> <%= new Date(posts[0].createdAt).toLocaleDateString('vi-VN') %></span>
+                <span><i class="far fa-eye"></i> <%= posts[0].views || 0 %></span>
+              </div>
+            </div>
+            <a href="/blog/<%= posts[0]._id %>" class="featured-btn">Đọc tiếp</a>
+          </div>
+        </div>
+      <% } else if (locals.isSearchResult) { %>
+        <div class="text-center py-5">
+          <h3>Không tìm thấy bài viết nào phù hợp</h3>
+          <p>Vui lòng thử tìm kiếm với từ khóa khác</p>
+        </div>
+      <% } else { %>
+        <div class="text-center py-5">
+          <h3>Chưa có bài viết nào</h3>
+          <p>Hãy quay lại sau</p>
+        </div>
+      <% } %>
+    </div>
+  </section>
+
+  <!-- Danh sách bài viết -->
+  <section class="blog-list">
+    <div class="container">
+      <h2 class="section-title">Bài viết gần đây</h2>
+      
+      <div class="blog-grid">
+        <% if(posts && posts.length > 0) { %>
+          <% posts.slice(1).forEach(post => { %>
+            <div class="blog-card">
+              <div class="blog-img-container">
+                <span class="blog-category">Review</span>
+                <img src="<%= post.image %>" alt="<%= post.title %>" class="blog-img">
+              </div>
+              <div class="blog-info">
+                <h3 class="blog-title">
+                  <a href="/blog/<%= post._id %>"><%= post.title %></a>
+                </h3>
+                <p class="blog-excerpt">
+                  <%= post.excerpt || post.content.substring(0, 100) + '...' %>
+                </p>
+                <div class="blog-meta">
+                  <div class="blog-author">
+                    <img src="/uploads/users/default-avatar.jpg" alt="Author">
+                    <span><%= post.author %></span>
+                  </div>
+                  <div class="blog-stats">
+                    <span><i class="far fa-calendar"></i> <%= new Date(post.createdAt).toLocaleDateString('vi-VN') %></span>
+                    <span><i class="far fa-eye"></i> <%= post.views || 0 %></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        <% } %>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="newsletter-section">
+    <div class="container">
+      <h2>Đăng ký nhận bản tin</h2>
+      <p>Nhận thông báo về những bài viết mới nhất và gợi ý sách hay mỗi tuần</p>
+      <div class="newsletter-form">
+        <input type="email" class="newsletter-input" placeholder="Email của bạn">
+        <button type="submit" class="newsletter-btn">Đăng ký</button>
+      </div>
+    </div>
+  </section>
+
+  <%- include('partials/footer') %>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Animation khi cuộn trang
+      function animateOnScroll() {
+        const elements = document.querySelectorAll('.blog-card');
+        elements.forEach((element, index) => {
+          setTimeout(() => {
+            element.style.opacity = '1';
+            element.style.transform = 'translateY(0)';
+          }, 100 * index);
+        });
+      }
+      
+      // Hiệu ứng ban đầu
+      const cards = document.querySelectorAll('.blog-card');
+      cards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+      });
+      
+      // Áp dụng animation khi trang đã tải
+      setTimeout(animateOnScroll, 300);
+    });
+  </script>
+</body>
+</html>

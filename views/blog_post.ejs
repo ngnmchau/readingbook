@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <%- include('partials/head', { page: 'blog' }) %>
+  <title><%= post.title %> | ReadingBook</title>
+  <link rel="stylesheet" href="/css/blog.css">
+</head>
+<body>
+  <%- include('partials/navbar') %>
+
+  <section class="blog_post">
+    <div class="container">
+      <h1 class="post-title"><%= post.title %></h1>
+      <p class="post-meta">Bởi <%= post.author %> - <%= post.date %></p>
+      <img src="<%= post.image %>" alt="<%= post.title %>" class="post-image">
+      <div class="post-content">
+        <%= post.content %>
+      </div>
+
+      <!-- Nút Like và Bình luận -->
+      <div class="post-actions">
+        <button id="likeBtn" class="btn-like">👍 Thích (<span id="likeCount"><%= post.likes %></span>)</button>
+      </div>
+
+      <!-- Bình luận -->
+      <div class="comments-section">
+        <h3>Bình luận</h3>
+        <ul class="comments-list">
+          <% post.comments.forEach(comment => { %>
+            <li>
+              <strong><%= comment.author %>:</strong>
+              <p><%= comment.text %></p>
+            </li>
+          <% }) %>
+        </ul>
+
+        <form id="commentForm">
+          <input type="text" id="commentText" placeholder="Viết bình luận..." required>
+          <button type="submit">Gửi</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <%- include('partials/footer') %>
+  <script src="/js/blog.js"></script>
+</body>
+</html>

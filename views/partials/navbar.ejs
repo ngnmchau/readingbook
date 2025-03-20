@@ -1,0 +1,164 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <img src="/uploads/common/logo.jpg" alt="" height="40">
+      Bookverse
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarMain">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="/">Trang chủ</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/library">Thư viện</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+            Thể loại
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="/categories/tieu-thuyet">Tiểu thuyết</a></li>
+            <li><a class="dropdown-item" href="/categories/van-hoc">Văn học</a></li>
+            <li><a class="dropdown-item" href="/categories/kinh-te">Kinh tế</a></li>
+            <li><a class="dropdown-item" href="/categories/tam-ly">Tâm lý</a></li>
+            <li><a class="dropdown-item" href="/categories/ky-nang-song">Kỹ năng sống</a></li>           
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+      </ul>
+      <form class="search-form" onsubmit="submitSearch(event)">
+        <div class="search-container position-relative d-flex align-items-center">
+          <input type="text" class="search-input form-control" placeholder="Tìm kiếm sách..." oninput="toggleClearButton()" value="<%= locals.filters && locals.filters.search ? locals.filters.search : '' %>" />
+          <button class="clear-btn btn" onclick="clearSearch(event)" style="display: none;" type="button">
+            <i class="fas fa-times"></i>
+          </button>
+          <button class="search-btn btn" type="submit">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+      </form>
+
+      <div class="d-flex align-items-center">
+        <% if (locals.user) { %>
+          <div class="dropdown">
+            <button class="btn dropdown-toggle user-menu" type="button" id="userDropdown" data-bs-toggle="dropdown">
+              <img src="<%= user.avatar || '/uploads/users/default-avatar.jpg' %>" alt="Avatar" class="avatar">
+              <span><%= user.name %></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+              <li><a class="dropdown-item" href="/profile"><i class="fas fa-user me-2"></i>Hồ sơ</a></li>
+              <li><a class="dropdown-item" href="/favorites"><i class="fas fa-heart me-2"></i>Sách yêu thích</a></li>
+              <li><a class="dropdown-item" href="/reading-history"><i class="fas fa-history me-2"></i>Lịch sử đọc</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/auth/logout"><i class="fas fa-sign-out-alt me-2"></i>Đăng xuất</a></li>
+            </ul>
+          </div>
+        <% } else { %>
+          <a href="/auth/login" class="btn btn-outline-primary me-2">Đăng nhập</a>
+          <a href="/auth/register" class="btn btn-primary">Đăng ký</a>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</nav> 
+
+
+<style>
+  .search-form {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  .search-input {
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 25px;
+    border: 1px solid #ddd;
+    width: 100%;
+    padding-right: 40px; /* Tạo không gian cho nút xóa */
+  }
+
+  .search-input:focus {
+    outline: none;
+    border-color: #8e44ad; /* Màu tím */
+    box-shadow: 0 4px 8px rgba(142, 68, 173, 0.4);
+  }
+
+  .search-btn {
+    background-color: #8e44ad; /* Màu tím */
+    color: white;
+    border-radius: 50%;
+    padding: 12px 14px;
+    margin-left: 10px; /* Khoảng cách giữa thanh tìm kiếm và nút tìm kiếm */
+    z-index: 1;
+    transition: background-color 0.3s ease;
+    border: none;
+  }
+
+  .search-btn:hover {
+    background-color: #732d91; /* Màu tím đậm khi hover */
+  }
+
+  .clear-btn {
+    background-color: transparent;
+    color: #8e44ad;
+    font-size: 20px;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    right: 60px; /* Điều chỉnh vị trí nút xóa để không bị chồng lấp với nút tìm kiếm */
+    z-index: 2;
+  }
+
+  .clear-btn:hover {
+    color: #732d91;
+  }
+</style>
+
+<script>
+  function toggleClearButton() {
+    const searchInput = document.querySelector('.search-input');
+    const clearBtn = document.querySelector('.clear-btn');
+    
+    if (searchInput && clearBtn) {
+      if (searchInput.value.trim() !== '') {
+        clearBtn.style.display = 'inline-block';
+      } else {
+        clearBtn.style.display = 'none';
+      }
+    }
+  }
+
+  function clearSearch(event) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation(); // Ngăn event lan truyền lên form
+    }
+    document.querySelector('.search-input').value = '';
+    document.querySelector('.clear-btn').style.display = 'none';
+  }
+
+  function submitSearch(event) {
+    event.preventDefault();
+    const searchInput = document.querySelector('.search-input');
+    const searchTerm = searchInput.value.trim();
+    
+    if (searchTerm) {
+      // Chuyển hướng đến trang thư viện với tham số tìm kiếm
+      window.location.href = `/library?search=${encodeURIComponent(searchTerm)}`;
+    }
+  }
+</script>

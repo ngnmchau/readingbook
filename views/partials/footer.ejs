@@ -1,0 +1,46 @@
+<footer class="footer bg-light text-dark py-5">
+  <div class="container">
+    
+    <div class="row">
+      <!-- Cột giới thiệu -->
+      <div class="col-md-4 mb-4">
+        <h5 class="text-uppercase font-weight-bold mb-3">Bookverse</h5>
+        <p>Bookverse là nền tảng đọc sách trực tuyến hàng đầu Việt Nam, nơi bạn có thể khám phá, học hỏi và tận hưởng những cuốn sách tuyệt vời từ các tác giả nổi tiếng.</p>
+      </div>
+      
+      <!-- Cột liên kết -->
+      <div class="col-md-4 mb-4">
+        <h5 class="text-uppercase font-weight-bold mb-3">Liên kết</h5>
+        <ul class="list-unstyled">
+          <li><a href="/about" class="text-dark text-decoration-none"><i class="fas fa-info-circle"></i> Về chúng tôi</a></li>
+          <li><a href="/terms" class="text-dark text-decoration-none"><i class="fas fa-file-alt"></i> Điều khoản sử dụng</a></li>
+          <li><a href="/privacy" class="text-dark text-decoration-none"><i class="fas fa-shield-alt"></i> Chính sách bảo mật</a></li>
+        </ul>
+      </div>
+      
+      <!-- Cột liên hệ -->
+      <div class="col-md-4 mb-4">
+        <h5 class="text-uppercase font-weight-bold mb-3">Liên hệ</h5>
+        <p>Email: <a href="mailto:info@bookverse.vn" class="text-dark text-decoration-none">info@bookverse.vn</a></p>
+        <p>Điện thoại: <a href="tel:0123456789" class="text-dark text-decoration-none">0123 456 789</a></p>
+      </div>
+    </div>
+
+    <hr class="border-dark">
+
+    <!-- Bản quyền -->
+    <div class="text-center">
+      <p class="mb-0">&copy; 2023 Bookverse. Tất cả quyền được bảo lưu.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/js/bootstrap.bundle.min.js"></script>
+<script src="/js/main.js"></script>
+
+<% if (typeof readerPage !== 'undefined' && readerPage) { %>
+  <script src="/js/reader.js"></script>
+<% } %>
+</body>
+</html>

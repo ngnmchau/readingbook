@@ -1,0 +1,348 @@
+/* Styles for the Reader Page */
+:root {
+  --reader-font-size: 18px;
+  --reader-line-height: 1.8;
+  --reader-text-color: #333;
+  --reader-bg-color: #fff;
+  --reader-card-bg: #fff;
+  --reader-border-color: #eaeaea;
+}
+
+body.dark-mode {
+  --reader-text-color: #eee;
+  --reader-bg-color: #222;
+  --reader-card-bg: #333;
+  --reader-border-color: #444;
+}
+
+body.dark-mode {
+  background-color: var(--reader-bg-color);
+  color: var(--reader-text-color);
+}
+
+body.dark-mode .card {
+  background-color: var(--reader-card-bg);
+  color: var(--reader-text-color);
+  border-color: var(--reader-border-color);
+}
+
+body.dark-mode .card-header {
+  background-color: #2a2a2a;
+  border-bottom: 1px solid var(--reader-border-color);
+}
+
+.reader-page {
+  min-height: 100vh;
+  background-color: var(--reader-bg-color);
+  transition: background-color 0.3s ease;
+}
+
+.reader-content {
+  padding-top: 2rem;
+  padding-bottom: 4rem;
+}
+
+.chapter-content {
+  font-size: var(--reader-font-size);
+  line-height: var(--reader-line-height);
+  color: var(--reader-text-color);
+  transition: color 0.3s ease;
+  text-align: justify;
+}
+
+.chapter-content p {
+  margin-bottom: 1.5rem;
+}
+
+.chapter-navigation {
+  margin-top: 2rem;
+  margin-bottom: 5rem;
+}
+
+.chapter-title {
+  font-weight: 500;
+}
+
+.reader-tools button {
+  margin-left: 0.5rem;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.reader-tools button:hover {
+  opacity: 1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .reader-header {
+    padding: 0.5rem 0;
+  }
+  
+  .reader-header .col-md-4 {
+    padding: 0.25rem 0;
+  }
+  
+  .reader-header .text-end {
+    text-align: center !important;
+  }
+  
+  .chapter-title {
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    max-width: 180px;
+  }
+  
+  .reader-tools {
+    margin-top: 0.5rem;
+  }
+}
+
+/* Reader Page Specific Styles */
+body.reader-page {
+  background-color: #f5f5f5;
+}
+
+.reader-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 15px;
+}
+
+.reader-header {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.reader-title {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.reader-book-title {
+  color: #666;
+}
+
+.reader-content {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  font-size: 18px;
+  line-height: 1.8;
+}
+
+.reader-content p {
+  margin-bottom: 20px;
+}
+
+.reader-navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.nav-button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+}
+
+.nav-button.prev i {
+  margin-right: 5px;
+}
+
+.nav-button.next i {
+  margin-left: 5px;
+}
+
+.nav-button.disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.reader-settings {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.setting-button {
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 8px 15px;
+  cursor: pointer;
+}
+
+.setting-button:hover {
+  background-color: #e9ecef;
+}
+
+/* Font Size Controls */
+.font-size-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.font-size-btn {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.font-size-btn:hover {
+  background-color: #e9ecef;
+}
+
+/* Theme Controls */
+.theme-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.theme-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.theme-btn.active {
+  border-color: #007bff;
+}
+
+.theme-light {
+  background-color: #fff;
+}
+
+.theme-sepia {
+  background-color: #f8f0e0;
+}
+
+.theme-dark {
+  background-color: #333;
+}
+
+/* Theme Classes */
+body.theme-light .reader-content {
+  background-color: #fff;
+  color: #333;
+}
+
+body.theme-sepia .reader-content {
+  background-color: #f8f0e0;
+  color: #5b4636;
+}
+
+body.theme-dark .reader-content {
+  background-color: #333;
+  color: #ddd;
+}
+
+/* Chapter List */
+.chapter-list-container {
+  position: fixed;
+  top: 0;
+  left: -300px;
+  width: 300px;
+  height: 100%;
+  background-color: #fff;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  transition: left 0.3s;
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+.chapter-list-container.active {
+  left: 0;
+}
+
+.chapter-list-header {
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chapter-list-title {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.close-chapter-list {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.chapter-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.chapter-list-item {
+  border-bottom: 1px solid #eee;
+}
+
+.chapter-list-item a {
+  display: block;
+  padding: 15px 20px;
+  color: #333;
+  text-decoration: none;
+}
+
+.chapter-list-item.active a {
+  background-color: #f0f4f8;
+  color: #007bff;
+  font-weight: 500;
+}
+
+.chapter-list-item a:hover {
+  background-color: #f8f9fa;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  z-index: 999;
+}
+
+.overlay.active {
+  display: block;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .reader-content {
+    padding: 20px;
+    font-size: 16px;
+  }
+  
+  .reader-settings {
+    flex-wrap: wrap;
+  }
+} 

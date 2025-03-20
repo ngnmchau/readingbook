@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <%- include('partials/head', { page: 'home' }) %>
+  <title>Bookverse - Khám phá thế giới sách trực tuyến</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
+  <style>
+    :root {
+      --swiper-theme-color: var(--primary-color);
+    }
+    
+    .homepage {
+      background-color: #f8f9fa;
+    }
+    
+    /* Hero section mới với background gradient */
+    .hero-section {
+      position: relative;
+      background: linear-gradient(135deg, #7209b7, #3a0ca3);
+      color: #fff;
+      border-radius: 0 0 50px 50px;
+      padding: 5rem 0 8rem;
+      margin-bottom: 6rem;
+      overflow: hidden;
+    }
+    
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('/uploads/common/pattern.svg');
+      background-repeat: repeat;
+      opacity: 0.1;
+    }
+    
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 800;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+    }
+    
+    .hero-subtitle {
+      font-size: 1.25rem;
+      opacity: 0.8;
+      margin-bottom: 2rem;
+    }
+    
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .hero-btn {
+      padding: 0.75rem 2rem;
+      border-radius: 50px;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    
+    .btn-explore {
+      background-color: #fff;
+      color: var(--primary-color);
+    }
+    
+    .btn-explore:hover {
+      background-color: #f0f0f0;
+    }
+    
+    .btn-signup {
+      background-color: var(--accent-color);
+      color: #fff;
+      border: none;
+    }
+    
+    .btn-signup:hover {
+      background-color: #3db8df;
+    }
+    
+    .hero-stats {
+      display: flex;
+      gap: 2.5rem;
+      margin-top: 3rem;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .statistic-value {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 0.25rem;
+      line-height: 1;
+    }
+    
+    .statistic-label {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+    
+    .hero-image {
+      position: relative;
+      text-align: center;
+    }
+    
+    .floating-books {
+      position: relative;
+      max-width: 100%;
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+      100% { transform: translateY(0px); }
+    }
+    
+    /* Featured Books */
+    .featured-section {
+      margin-top: -5rem;
+      margin-bottom: 4rem;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .section-title {
+      text-align: center;
+      margin-bottom: 1rem;
+      font-size: 2.25rem;
+      font-weight: 700;
+    }
+    
+    .section-subtitle {
+      text-align: center;
+      color: var(--light-text);
+      margin-bottom: 3rem;
+    }
+    
+    .featured-wrapper {
+      position: relative;
+    }
+    
+    .swiper {
+      width: 100%;
+      padding-bottom: 3rem;
+    }
+    
+    .book-card {
+      background: #fff;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .book-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    }
+    
+    .book-card-img {
+      position: relative;
+      height: 320px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f5f5f5;
+    }
+    
+    .book-card-img img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+      transition: all 0.5s;
+    }
+    
+    .book-card:hover .book-card-img img {
+      transform: scale(1.05);
+    }
+    
+    .book-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .book-card:hover .book-overlay {
+      opacity: 1;
+    }
+    
+    .book-actions {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+    
+    .book-action-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-color);
+      transition: all 0.3s;
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    
+    .book-card:hover .book-action-btn {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .book-action-btn:hover {
+      background: var(--primary-color);
+      color: #fff;
+    }
+    
+    .book-action-btn:nth-child(1) {
+      transition-delay: 0.05s;
+    }
+    
+    .book-action-btn:nth-child(2) {
+      transition-delay: 0.1s;
+    }
+    
+    .book-card-body {
+      padding: 1.5rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .book-card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    
+    .book-card-author {
+      color: var(--light-text);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+    
+    .book-card-footer {
+      margin-top: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .book-rating {
+      display: flex;
+      align-items: center;
+      color: #ffc107;
+    }
+    
+    .book-rating-number {
+      color: var(--text-color);
+      margin-left: 0.5rem;
+      font-weight: 600;
+    }
+    
+    /* Categories Section */
+    .categories-section {
+      padding: 5rem 0;
+      background-color: #f0f2f5;
+    }
+    
+    .category-card {
+      padding: 2rem;
+      text-align: center;
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+      height: 100%;
+    }
+    
+    .category-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    
+    .category-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: var(--primary-color);
+    }
+    
+    .category-icon {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: rgba(114, 9, 183, 0.1);
+      color: var(--primary-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+      margin: 0 auto 1.5rem;
+    }
+    
+    .category-name {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+    
+    .category-count {
+      color: var(--light-text);
+      margin-bottom: 1.5rem;
+    }
+    
+    /* Top Authors */
+    .authors-section {
+      padding: 5rem 0;
+    }
+    
+    .author-card {
+      display: flex;
+      align-items: center;
+      background: #fff;
+      border-radius: 15px;
+      padding: 1.5rem;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s;
+      margin-bottom: 1.5rem;
+    }
+    
+    .author-card:hover {
+      transform: translateX(5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    
+    .author-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin-right: 1.5rem;
+      flex-shrink: 0;
+    }
+    
+    .author-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .author-details {
+      flex-grow: 1;
+    }
+    
+    .author-name {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+    
+    .author-books {
+      color: var(--light-text);
+      font-size: 0.9rem;
+      margin-bottom: 0.75rem;
+    }
+    
+    .author-bio {
+      color: var(--text-color);
+      font-size: 0.95rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    
+    /* App Download */
+    .app-section {
+      padding: 5rem 0;
+      background-color: var(--primary-color);
+      color: #fff;
+      border-radius: 30px;
+      overflow: hidden;
+      position: relative;
+      margin-bottom: 5rem;
+    }
+    
+    .app-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('/uploads/common/pattern.svg');
+      background-repeat: repeat;
+      opacity: 0.05;
+    }
+    
+    .app-content {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .app-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 1.5rem;
+    }
+    
+    .app-desc {
+      font-size: 1.1rem;
+      opacity: 0.8;
+      margin-bottom: 2rem;
+      max-width: 80%;
+    }
+    
+    .app-buttons {
+      display: flex;
+      gap: 1rem;
+    }
+    
+    .app-btn {
+      display: flex;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 0.75rem 1.5rem;
+      border-radius: 10px;
+      color: #fff;
+      transition: all 0.3s;
+    }
+    
+    .app-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-3px);
+    }
+    
+    .app-btn i {
+      font-size: 1.75rem;
+      margin-right: 0.75rem;
+    }
+    
+    .app-btn-text small {
+      display: block;
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+    
+    .app-btn-text span {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+    
+    .app-image {
+      text-align: center;
+    }
+    
+    .app-image img {
+      max-width: 100%;
+      transform: translateY(0px);
+      animation: floatApp 6s ease-in-out infinite;
+    }
+    
+    @keyframes floatApp {
+      0% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-15px) rotate(2deg); }
+      100% { transform: translateY(0px) rotate(0deg); }
+    }
+    
+    /* Newsletter */
+    .newsletter-section {
+      padding: 4rem 0;
+      text-align: center;
+    }
+    
+    .newsletter-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    
+    .newsletter-subtitle {
+      color: var(--light-text);
+      margin-bottom: 2rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .newsletter-form {
+      max-width: 500px;
+      margin: 0 auto;
+      position: relative;
+    }
+    
+    .newsletter-input {
+      width: 100%;
+      padding: 1rem 1.5rem;
+      border-radius: 50px;
+      border: 1px solid #e0e0e0;
+      background: #f8f9fa;
+      font-size: 1rem;
+      padding-right: 7rem;
+    }
+    
+    .newsletter-btn {
+      position: absolute;
+      right: 5px;
+      top: 5px;
+      background: var(--primary-color);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    
+    .newsletter-btn:hover {
+      background: var(--secondary-color);
+    }
+    
+    /* Responsive */
+    @media (max-width: 992px) {
+      .hero-title {
+        font-size: 2.5rem;
+      }
+      
+      .hero-image {
+        margin-top: 3rem;
+      }
+      
+      .app-desc {
+        max-width: 100%;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .hero-section {
+        padding: 4rem 0 6rem;
+      }
+      
+      .hero-stats {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      .app-buttons {
+        flex-direction: column;
+      }
+      
+      .app-image {
+        margin-top: 2rem;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .hero-title {
+        font-size: 2rem;
+      }
+      
+      .hero-buttons {
+        flex-direction: column;
+      }
+      
+      .section-title {
+        font-size: 1.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <%- include('partials/navbar') %>
+  
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 hero-content">
+          <h1 class="hero-title">Khám phá thế giới qua từng trang sách</h1>
+          <p class="hero-subtitle">Trải nghiệm đọc sách trực tuyến với hàng ngàn tác phẩm đa dạng thể loại, từ văn học kinh điển đến tác phẩm hiện đại.</p>
+          
+          <div class="hero-buttons">
+            <a href="/library" class="btn btn-light">Khám phá thư viện</a>
+            <a href="/auth/register" class="btn btn-outline-light">Đăng ký miễn phí</a>
+          </div>
+        </div>
+        <div class="col-lg-6 hero-image">
+          <img src="/uploads/common/hero-book.png" alt="Books" class="floating-books">
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Featured Books -->
+  <section class="featured-section">
+    <div class="container">
+      <h2 class="section-title">Sách nổi bật</h2>
+      <p class="section-subtitle">Những cuốn sách được đánh giá cao nhất</p>
+      
+      <div class="featured-slider">
+        <div class="swiper featured-swiper">
+          <div class="swiper-wrapper">
+            <% featuredBooks.forEach(book => { %>
+              <div class="swiper-slide">
+                <div class="book-card">
+                  <div class="book-card-img">
+                    <img src="<%= book.cover || '/uploads/books/default-book.jpg' %>" alt="<%= book.title %>">
+                    <div class="book-overlay">
+                      <div class="book-actions">
+                        <a href="/books/<%= book._id %>" class="book-action-btn">
+                          <i class="fas fa-eye"></i>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="book-card-body">
+                    <h3 class="book-card-title"><%= book.title %></h3>
+                    <p class="book-card-author"><%= book.author %></p>
+                    <div class="book-card-footer">
+                      <div class="book-rating">
+                        <i class="fas fa-star"></i>
+                        <span class="book-rating-number"><%= book.rating.toFixed(1) %></span>
+                      </div>
+                      <a href="/books/<%= book._id %>" class="btn btn-sm btn-outline-primary">Đọc ngay</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- New Books -->
+  <section class="new-books-section">
+    <div class="container">
+      <h2 class="section-title">Sách mới cập nhật</h2>
+      <p class="section-subtitle">Những cuốn sách mới nhất trong thư viện</p>
+      
+      <div class="row">
+        <% newBooks.forEach(book => { %>
+          <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-4">
+            <div class="book-card">
+              <div class="book-card-img">
+                <img src="<%= book.cover || '/uploads/books/default-book.jpg' %>" alt="<%= book.title %>">
+                <div class="book-overlay">
+                  <div class="book-actions">
+                    <a href="/books/<%= book._id %>" class="book-action-btn">
+                      <i class="fas fa-eye"></i>
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div class="book-card-body">
+                <h3 class="book-card-title"><%= book.title %></h3>
+                <p class="book-card-author"><%= book.author %></p>
+                <div class="book-card-footer">
+                  <div class="book-rating">
+                    <i class="fas fa-star"></i>
+                    <span class="book-rating-number"><%= book.rating.toFixed(1) %></span>
+                  </div>
+                  <a href="/books/<%= book._id %>" class="btn btn-sm btn-outline-primary">Đọc ngay</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Categories -->
+  <section class="categories-section">
+    <div class="container">
+      <h2 class="section-title">Khám phá thể loại</h2>
+      <p class="section-subtitle">Tìm kiếm sách theo sở thích của bạn</p>
+      
+      <div class="row">
+        <% categories.forEach(category => { %>
+          <div class="col-md-4 col-sm-6">
+            <div class="category-card">
+              <div class="category-icon">
+                <i class="fas <%= category.icon %>"></i>
+              </div>
+              <h3 class="category-name"><%= category.name %></h3>
+              <p class="category-count"><%= category.count %> cuốn sách</p>
+              <a href="/library?category=<%= category.name %>" class="btn btn-outline-primary">Khám phá</a>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Top Authors -->
+  <section class="authors-section">
+    <div class="container">
+      <h2 class="section-title">Tác giả nổi bật</h2>
+      <p class="section-subtitle">Những cây bút tài năng với nhiều tác phẩm được yêu thích</p>
+      
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="author-card">
+            <div class="author-avatar">
+              <img src="/uploads/authors/author1.jpg" alt="Tác giả">
+            </div>
+            <div class="author-details">
+              <h3 class="author-name">Nguyễn Nhật Ánh</h3>
+              <p class="author-books">25 tác phẩm</p>
+              <p class="author-bio">Nhà văn nổi tiếng với những tác phẩm văn học thanh thiếu niên đầy tính nhân văn và gần gũi với đời sống.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-lg-6">
+          <div class="author-card">
+            <div class="author-avatar">
+              <img src="/uploads/authors/author2.jpg" alt="Tác giả">
+            </div>
+            <div class="author-details">
+              <h3 class="author-name">Nguyễn Ngọc Tư</h3>
+              <p class="author-books">18 tác phẩm</p>
+              <p class="author-bio">Nhà văn với nhiều tác phẩm mang đậm hơi thở miền Tây Nam Bộ, nhiều lần đoạt giải thưởng văn học uy tín.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-lg-6">
+          <div class="author-card">
+            <div class="author-avatar">
+              <img src="/uploads/authors/author3.jpg" alt="Tác giả">
+            </div>
+            <div class="author-details">
+              <h3 class="author-name">Trang Hạ</h3>
+              <p class="author-books">15 tác phẩm</p>
+              <p class="author-bio">Nhà văn nữ với phong cách viết sắc sảo, mạnh mẽ về đề tài tình yêu và cuộc sống hiện đại.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-lg-6">
+          <div class="author-card">
+            <div class="author-avatar">
+              <img src="/uploads/authors/author4.jpg" alt="Tác giả">
+            </div>
+            <div class="author-details">
+              <h3 class="author-name">Nguyễn Phong Việt</h3>
+              <p class="author-books">12 tác phẩm</p>
+              <p class="author-bio">Nhà thơ, nhà văn trẻ với những tác phẩm thơ và văn xuôi lãng mạn được nhiều độc giả trẻ yêu thích.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- App Download -->
+  <section class="app-section">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 app-content">
+          <h2 class="app-title">Đọc sách mọi lúc, mọi nơi</h2>
+          <p class="app-desc">Tải ứng dụng Bookverse để đọc sách mọi lúc, mọi nơi. Trải nghiệm đọc sách tuyệt vời trên thiết bị di động của bạn.</p>
+          
+          <div class="app-buttons">
+            <a href="#" class="app-btn">
+              <i class="fab fa-google-play"></i>
+              <div class="app-btn-text">
+                <small>Tải về từ</small>
+                <span>Google Play</span>
+              </div>
+            </a>
+            <a href="#" class="app-btn">
+              <i class="fab fa-apple"></i>
+              <div class="app-btn-text">
+                <small>Tải về từ</small>
+                <span>App Store</span>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="col-lg-6 app-image">
+          <img src="/uploads/common/mobile-app.jpg" alt="Mobile App">
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Newsletter -->
+  <section class="newsletter-section">
+    <div class="container">
+      <h2 class="newsletter-title">Đăng ký nhận thông báo</h2>
+      <p class="newsletter-subtitle">Cập nhật sách mới, khuyến mãi đặc biệt và các sự kiện sắp tới</p>
+      
+      <form class="newsletter-form">
+        <input type="email" class="newsletter-input" placeholder="Nhập địa chỉ email của bạn">
+        <button type="submit" class="newsletter-btn">Đăng ký</button>
+      </form>
+    </div>
+  </section>
+  
+  <%- include('partials/footer') %>
+  
+  <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Thiết lập Swiper
+      const featuredSwiper = new Swiper('.featured-swiper', {
+        slidesPerView: 1,
+        spaceBetween: 20,
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true,
+        },
+        breakpoints: {
+          640: {
+            slidesPerView: 2,
+          },
+          992: {
+            slidesPerView: 3,
+          },
+          1200: {
+            slidesPerView: 4,
+          },
+        },
+        autoplay: {
+          delay: 3000,
+          disableOnInteraction: false,
+        },
+      });
+      
+      // Xử lý nút yêu thích
+      const favoriteButtons = document.querySelectorAll('.favorite-toggle');
+      favoriteButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          const bookId = this.dataset.id;
+          const icon = this.querySelector('i');
+          
+          // Kiểm tra trạng thái đăng nhập thông qua fetch API
+          fetch('/api/auth/check-login')
+            .then(response => response.json())
+            .then(data => {
+              if (data.isLoggedIn) {
+                // Người dùng đã đăng nhập - thêm vào yêu thích
+                fetch(`/api/books/${bookId}/favorites`, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  }
+                })
+                .then(response => response.json())
+                .then(data => {
+                  if (data.success) {
+                    icon.classList.remove('far');
+                    icon.classList.add('fas');
+                  }
+                })
+                .catch(error => console.error('Error:', error));
+              } else {
+                // Người dùng chưa đăng nhập - chuyển hướng
+                window.location.href = '/auth/login';
+              }
+            })
+            .catch(error => {
+              console.error('Error checking login status:', error);
+              window.location.href = '/auth/login';
+            });
+        });
+      });
+    });
+  </script>
+</body>
+</html> 

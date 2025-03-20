@@ -1,0 +1,37 @@
+<header class="admin-header">
+  <div class="header-left">
+    <button class="sidebar-toggle d-md-none">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+  
+  <div class="header-right">
+    <!-- User Profile Dropdown -->
+    <div class="header-profile dropdown">
+      <button class="dropdown-toggle d-flex align-items-center" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+        <div class="user-img me-2">
+          <img src="<%= user.avatar || '/uploads/users/default-avatar.jpg' %>" alt="<%= user.name %>" class="rounded-circle" width="40" height="40">
+        </div>
+        <div class="user-info d-none d-md-block">
+          <span class="user-name"><%= user.name %></span>
+          <span class="user-role">Administrator</span>
+        </div>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+        <li>
+          <div class="dropdown-user-details">
+            <div class="user-img">
+              <img src="<%= user.avatar || '/uploads/users/default-avatar.jpg' %>" alt="<%= user.name %>" class="rounded-circle" width="50" height="50">
+            </div>
+            <div class="user-details">
+              <h6><%= user.name %></h6>
+              <p><%= user.email %></p>
+            </div>
+          </div>
+        </li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" href="/auth/logout"><i class="fas fa-sign-out-alt me-2"></i> Đăng xuất</a></li>
+      </ul>
+    </div>
+  </div>
+</header> 

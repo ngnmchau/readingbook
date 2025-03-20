@@ -1,0 +1,10 @@
+
+<%- include('../layouts/admin-layout', {
+  title: 'Thêm sách mới',
+  breadcrumbs: [
+    { name: 'Trang chủ', url: '/admin' },
+    { name: 'Quản lý sách', url: '/admin/books' },
+    { name: 'Thêm sách mới', active: true }
+  ],
+  content: include('./add-content.ejs')
+}) %> 

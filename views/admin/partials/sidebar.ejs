@@ -1,0 +1,90 @@
+<div class="admin-sidebar">
+  <div class="sidebar-header">
+    <div class="logo-container">
+      <img src="/uploads/common/logo.jpg" alt="BookVerse" class="logo-img">
+      <h2 class="logo-text">BookVerse</h2>
+    </div>
+    <button class="sidebar-close d-md-none">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  
+  <div class="sidebar-profile">
+    <div class="profile-info">
+      <img src="<%= user.avatar || '/uploads/users/default-avatar.jpg' %>" alt="<%= user.name %>" class="profile-img">
+      <div>
+        <h6 class="mb-0"><%= user.name %></h6>
+        <span class="badge bg-primary rounded-pill">Admin</span>
+      </div>
+    </div>
+  </div>
+  
+  <div class="sidebar-menu">
+    <ul class="nav-menu">
+      <li class="nav-item">
+        <a href="/admin" class="nav-link <%= title === 'Bảng điều khiển' ? 'active' : '' %>">
+          <i class="fas fa-tachometer-alt"></i>
+          <span>Dashboard</span>
+        </a>
+      </li>
+      
+      <li class="nav-item">
+        <a href="/" target="_blank" class="nav-link">
+          <i class="fas fa-external-link-alt"></i>
+          <span>Xem trang web</span>
+        </a>
+      </li>
+      
+      <li class="nav-item dropdown">
+        <a href="#" class="nav-link dropdown-toggle <%= title.includes('Quản lý sách') || title.includes('Thêm sách') || title.includes('Chi tiết sách') || title.includes('Chỉnh sửa sách') ? 'active' : '' %>" data-bs-toggle="collapse" data-bs-target="#booksCollapse">
+          <i class="fas fa-book"></i>
+          <span>Quản lý sách</span>
+          <i class="fas fa-angle-down dropdown-indicator"></i>
+        </a>
+        <div class="collapse submenu <%= title.includes('Quản lý sách') || title.includes('Thêm sách') || title.includes('Chi tiết sách') || title.includes('Chỉnh sửa sách') ? 'show' : '' %>" id="booksCollapse">
+          <ul>
+            <li class="submenu-item">
+              <a href="/admin/books" class="submenu-link <%= title === 'Quản lý sách' ? 'active' : '' %>">
+                <i class="fas fa-list"></i> Tất cả sách
+              </a>
+            </li>
+            <li class="submenu-item">
+              <a href="/admin/books/add" class="submenu-link <%= title === 'Thêm sách mới' ? 'active' : '' %>">
+                <i class="fas fa-plus"></i> Thêm sách mới
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+      
+      <li class="nav-item dropdown">
+        <a href="#" class="nav-link dropdown-toggle <%= title.includes('Người dùng') || title.includes('Thêm người dùng') || title.includes('Chi tiết người dùng') || title.includes('Chỉnh sửa người dùng') ? 'active' : '' %>" data-bs-toggle="collapse" data-bs-target="#usersCollapse">
+          <i class="fas fa-users"></i>
+          <span>Quản lý người dùng</span>
+          <i class="fas fa-angle-down dropdown-indicator"></i>
+        </a>
+        <div class="collapse submenu <%= title.includes('Người dùng') || title.includes('Thêm người dùng') || title.includes('Chi tiết người dùng') || title.includes('Chỉnh sửa người dùng') ? 'show' : '' %>" id="usersCollapse">
+          <ul>
+            <li class="submenu-item">
+              <a href="/admin/users" class="submenu-link <%= title === 'Quản lý người dùng' ? 'active' : '' %>">
+                <i class="fas fa-list"></i> Tất cả người dùng
+              </a>
+            </li>
+            <li class="submenu-item">
+              <a href="/admin/users/add" class="submenu-link <%= title === 'Thêm người dùng' ? 'active' : '' %>">
+                <i class="fas fa-user-plus"></i> Thêm người dùng
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+      
+      <li class="nav-item mt-auto">
+        <a href="/auth/logout" class="nav-link">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Đăng xuất</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div> 

@@ -1,0 +1,134 @@
+<div class="content-wrapper">
+  <div class="container-fluid">
+    <!-- Tiêu đề trang -->
+    <div class="row">
+      <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+          <h4 class="mb-0">Thêm sách mới</h4>
+          <div class="page-title-right">
+            <a href="/admin/books" class="btn btn-secondary">
+              <i class="fas fa-arrow-left me-1"></i> Quay lại
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form thêm sách -->
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title mb-0">Thông tin sách</h5>
+          </div>
+          <div class="card-body">
+            <form action="/admin/books" method="POST" enctype="multipart/form-data">
+              <div class="row">
+                <div class="col-md-8">
+                  <div class="mb-3">
+                    <label for="title" class="form-label">Tiêu đề <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="title" name="title" required
+                      value="<%= typeof formData !== 'undefined' ? formData.title : '' %>">
+                    <% if (typeof errors !== 'undefined' && errors.title) { %>
+                      <div class="text-danger"><%= errors.title %></div>
+                    <% } %>
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label for="author" class="form-label">Tác giả <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="author" name="author" required
+                      value="<%= typeof formData !== 'undefined' ? formData.author : '' %>">
+                    <% if (typeof errors !== 'undefined' && errors.author) { %>
+                      <div class="text-danger"><%= errors.author %></div>
+                    <% } %>
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label for="description" class="form-label">Mô tả <span class="text-danger">*</span></label>
+                    <textarea class="form-control" id="description" name="description" rows="6" required><%= typeof formData !== 'undefined' ? formData.description : '' %></textarea>
+                    <% if (typeof errors !== 'undefined' && errors.description) { %>
+                      <div class="text-danger"><%= errors.description %></div>
+                    <% } %>
+                  </div>
+                  
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label for="pages" class="form-label">Số trang <span class="text-danger">*</span></label>
+                      <input type="number" class="form-control" id="pages" name="pages" required min="1"
+                        value="<%= typeof formData !== 'undefined' ? formData.pages : '' %>">
+                      <% if (typeof errors !== 'undefined' && errors.pages) { %>
+                        <div class="text-danger"><%= errors.pages %></div>
+                      <% } %>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                      <label for="language" class="form-label">Ngôn ngữ <span class="text-danger">*</span></label>
+                      <select class="form-select" id="language" name="language" required>
+                        <option value="Tiếng Việt" <%= typeof formData !== 'undefined' && formData.language === 'Tiếng Việt' ? 'selected' : '' %>>Tiếng Việt</option>
+                        <option value="Tiếng Anh" <%= typeof formData !== 'undefined' && formData.language === 'Tiếng Anh' ? 'selected' : '' %>>Tiếng Anh</option>
+                        <option value="Tiếng Trung" <%= typeof formData !== 'undefined' && formData.language === 'Tiếng Trung' ? 'selected' : '' %>>Tiếng Trung</option>
+                        <option value="Tiếng Nhật" <%= typeof formData !== 'undefined' && formData.language === 'Tiếng Nhật' ? 'selected' : '' %>>Tiếng Nhật</option>
+                        <option value="Tiếng Hàn" <%= typeof formData !== 'undefined' && formData.language === 'Tiếng Hàn' ? 'selected' : '' %>>Tiếng Hàn</option>
+                        <option value="Khác" <%= typeof formData !== 'undefined' && formData.language === 'Khác' ? 'selected' : '' %>>Khác</option>
+                      </select>
+                      <% if (typeof errors !== 'undefined' && errors.language) { %>
+                        <div class="text-danger"><%= errors.language %></div>
+                      <% } %>
+                    </div>
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label for="categories" class="form-label">Thể loại <span class="text-danger">*</span></label>
+                    <select class="form-select" id="categories" name="categories" multiple required>
+                      <option value="Tiểu thuyết" <%= typeof formData !== 'undefined' && formData.categories && formData.categories.includes('Tiểu thuyết') ? 'selected' : '' %>>Tiểu thuyết</option>
+                      <option value="Văn học" <%= typeof formData !== 'undefined' && formData.categories && formData.categories.includes('Văn học') ? 'selected' : '' %>>Văn học</option>
+                      <option value="Kinh tế" <%= typeof formData !== 'undefined' && formData.categories && formData.categories.includes('Kinh tế') ? 'selected' : '' %>>Kinh tế</option>
+                      <option value="Tài chính" <%= typeof formData !== 'undefined' && formData.categories && formData.categories.includes('Tài chính') ? 'selected' : '' %>>Tài chính</option>
+                      <option value="Kỹ năng sống" <%= typeof formData !== 'undefined' && formData.categories && formData.categories.includes('Kỹ năng sống') ? 'selected' : '' %>>Kỹ năng sống</option>
+                      <option value="Tâm lý" <%= typeof formData !== 'undefined' && formData.categories && formData.categories.includes('Tâm lý') ? 'selected' : '' %>>Tâm lý</option>
+                      <option value="Khoa học" <%= typeof formData !== 'undefined' && formData.categories && formData.categories.includes('Khoa học') ? 'selected' : '' %>>Khoa học</option>
+                      <option value="Lịch sử" <%= typeof formData !== 'undefined' && formData.categories && formData.categories.includes('Lịch sử') ? 'selected' : '' %>>Lịch sử</option>
+                      <option value="Kỹ năng" <%= typeof formData !== 'undefined' && formData.categories && formData.categories.includes('Kỹ năng') ? 'selected' : '' %>>Kỹ năng</option>
+                      <option value="Thiếu nhi" <%= typeof formData !== 'undefined' && formData.categories && formData.categories.includes('Thiếu nhi') ? 'selected' : '' %>>Thiếu nhi</option>
+                    </select>
+                    <small class="text-muted">Giữ phím Ctrl để chọn nhiều thể loại</small>
+                    <% if (typeof errors !== 'undefined' && errors.categories) { %>
+                      <div class="text-danger"><%= errors.categories %></div>
+                    <% } %>
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label for="publishDate" class="form-label">Ngày xuất bản</label>
+                    <input type="date" class="form-control" id="publishDate" name="publishDate"
+                      value="<%= typeof formData !== 'undefined' && formData.publishDate ? new Date(formData.publishDate).toISOString().split('T')[0] : new Date().toISOString().split('T')[0] %>">
+                  </div>
+                </div>
+                
+                <div class="col-md-4">
+                  <div class="mb-4">
+                    <label for="cover" class="form-label">Ảnh bìa sách <span class="text-danger">*</span></label>
+                    <div class="text-center mb-3">
+                      <img id="cover-preview" src="/images/default-cover.png" 
+                           class="img-thumbnail" style="width: 200px; height: 280px; object-fit: cover;">
+                    </div>
+                    <input type="file" class="form-control custom-file-input" id="cover" name="cover" accept="image/*" required
+                           data-preview="#cover-preview">
+                    <small class="text-muted">Ảnh định dạng .jpg, .png hoặc .jpeg</small>
+                    <% if (typeof errors !== 'undefined' && errors.cover) { %>
+                      <div class="text-danger"><%= errors.cover %></div>
+                    <% } %>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mt-4 text-end">
+                <button type="reset" class="btn btn-secondary me-2">Làm lại</button>
+                <button type="submit" class="btn btn-primary">Thêm sách</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

@@ -1,0 +1,615 @@
+<%- include('partials/head', { title }) %>
+<%- include('partials/navbar') %>
+
+
+<div class="book-detail-page py-5">
+  <div class="container">
+    <div class="row">
+      <!-- Phần thông tin sách -->
+      <div class="col-lg-8 mb-4">
+        <div class="card shadow rounded-lg overflow-hidden border-0">
+          <div class="card-body p-0">
+            <!-- Breadcrumb -->
+            <div class="px-4 py-3 bg-light border-bottom">
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0 small">
+                  <li class="breadcrumb-item"><a href="/" class="text-decoration-none">Trang chủ</a></li>
+                  <li class="breadcrumb-item"><a href="/library" class="text-decoration-none">Thư viện</a></li>
+                  <li class="breadcrumb-item active" aria-current="page"><%= book.title %></li>
+                </ol>
+              </nav>
+            </div>
+            
+            <div class="row g-0">
+              <!-- Hình ảnh sách -->
+              <div class="col-md-4 position-relative">
+                <div class="book-cover-wrapper p-4">
+                  <div class="book-cover position-relative rounded-3 overflow-hidden shadow-sm">
+                    <img src="<%= book.cover %>" alt="<%= book.title %>" class="img-fluid w-100">
+                    <% if (book.status === 'completed') { %>
+                      <div class="book-status completed">Hoàn thành</div>
+                    <% } else if (book.status === 'ongoing') { %>
+                      <div class="book-status ongoing">Đang ra</div>
+                    <% } else { %>
+                      <div class="book-status coming">Sắp có</div>
+                    <% } %>
+                  </div>
+                  
+                  <div class="book-rating mt-3 text-center">
+                    <div class="stars d-inline-flex align-items-center">
+                      <% for(let i = 1; i <= 5; i++) { %>
+                        <i class="<%= i <= Math.round(book.rating) ? 'fas' : 'far' %> fa-star"></i>
+                      <% } %>
+                    </div>
+                    <span class="rating-value d-block fw-bold mt-1"><%= book.rating.toFixed(1) %>/5</span>
+                    <span class="text-muted small">(<%= book.comments ? book.comments.length : 0 %> đánh giá)</span>
+                  </div>
+                  
+                  <div class="book-actions mt-4">
+                    <% if (user) { %>
+                      <button class="btn btn-primary btn-lg w-100 mb-3 rounded-pill shadow-sm add-favorite" data-book-id="<%= book._id %>">
+                        <i class="fas fa-heart me-2"></i> Thêm vào sách yêu thích
+                      </button>
+                      <% if (chapters && chapters.length > 0) { %>
+                        <a href="/reader/<%= chapters[0]._id %>" class="btn btn-success btn-lg w-100 rounded-pill shadow-sm">
+                          <i class="fas fa-book-open me-2"></i> Đọc ngay
+                        </a>
+                      <% } %>
+                    <% } else { %>
+                      <a href="/auth/login" class="btn btn-primary btn-lg w-100 mb-3 rounded-pill shadow-sm">
+                        <i class="fas fa-sign-in-alt me-2"></i> Đăng nhập để thêm vào yêu thích
+                      </a>
+                    <% } %>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Thông tin chi tiết -->
+              <div class="col-md-8">
+                <div class="book-info p-4">
+                  <h1 class="book-title display-6 fw-bold mb-2"><%= book.title %></h1>
+                  
+                  <div class="author-info d-flex align-items-center mb-3">
+                    <span class="me-2 text-muted">Tác giả:</span>
+                    <span class="fw-medium text-primary"><%= book.author %></span>
+                  </div>
+                  
+                  <div class="book-metadata mb-4">
+                    <div class="row row-cols-2 g-3">
+                      <div class="col">
+                        <div class="d-flex align-items-center">
+                          <i class="fas fa-language text-primary me-2"></i>
+                          <span><%= book.language %></span>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div class="d-flex align-items-center">
+                          <i class="fas fa-calendar-alt text-primary me-2"></i>
+                          <span><%= new Date(book.publishDate).toLocaleDateString('vi-VN') %></span>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div class="d-flex align-items-center">
+                          <i class="fas fa-eye text-primary me-2"></i>
+                          <span><%= book.views.toLocaleString('vi-VN') %> lượt xem</span>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div class="d-flex align-items-center">
+                          <i class="fas fa-book-open text-primary me-2"></i>
+                          <span><%= chapters ? chapters.length : 0 %> chương</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="book-categories mb-4">
+                    <h6 class="text-muted small text-uppercase mb-2">Thể loại:</h6>
+                    <div>
+                      <% book.categories.forEach(category => { %>
+                        <a href="/categories/<%= category %>" class="badge bg-light text-dark text-decoration-none rounded-pill px-3 py-2 me-2 mb-2 fw-normal">
+                          <%= category %>
+                        </a>
+                      <% }) %>
+                    </div>
+                  </div>
+                  
+                  <div class="book-description mb-4">
+                    <h5 class="section-title border-bottom pb-2 mb-3">Giới thiệu sách</h5>
+                    <p class="text-muted"><%= book.description %></p>
+                  </div>
+                  
+                  <div class="social-share mt-4">
+                    <h6 class="text-muted small text-uppercase mb-2">Chia sẻ:</h6>
+                    <div class="d-flex">
+                      <a href="#" class="btn btn-sm btn-outline-primary rounded-circle me-2">
+                        <i class="fab fa-facebook-f"></i>
+                      </a>
+                      <a href="#" class="btn btn-sm btn-outline-info rounded-circle me-2">
+                        <i class="fab fa-twitter"></i>
+                      </a>
+                      <a href="#" class="btn btn-sm btn-outline-danger rounded-circle">
+                        <i class="fab fa-pinterest"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        <!-- Danh sách chương -->
+        <div class="card shadow rounded-lg overflow-hidden border-0 mb-4 mt-4">
+          <div class="card-header bg-white p-4 border-0">
+            <div class="d-flex justify-content-between align-items-center">
+              <h4 class="mb-0 fw-bold">Danh sách chương</h4>
+              <span class="badge bg-primary rounded-pill px-3 py-2"><%= chapters ? chapters.length : 0 %> chương</span>
+            </div>
+          </div>
+          <div class="card-body p-0">
+            <% if (chapters && chapters.length > 0) { %>
+              <div class="chapter-list-container">
+                <div class="list-group list-group-flush chapter-list">
+                  <% 
+                  // Sắp xếp chương theo thứ tự tăng dần
+                  const sortedChapters = [...chapters].sort((a, b) => a.order - b.order);
+                  sortedChapters.forEach((chapter, index) => { 
+                  %>
+                    <a href="/reader/<%= chapter._id %>" class="list-group-item list-group-item-action border-0 py-3 px-4">
+                      <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                          <div class="d-flex align-items-center">
+                            <span class="chapter-number bg-light text-dark rounded-pill px-3 py-1 me-3">
+                              Chương <%= chapter.order %>
+                            </span>
+                            <span class="chapter-title"><%= chapter.title.replace(`${book.title} - `, '') %></span>
+                          </div>
+                        </div>
+                        <div class="d-flex align-items-center">
+                          <span class="badge bg-light text-dark rounded-pill px-3 py-2">
+                            <i class="far fa-eye me-1"></i><%= chapter.views.toLocaleString('vi-VN') %>
+                          </span>
+                          <i class="fas fa-chevron-right ms-3 text-muted"></i>
+                        </div>
+                      </div>
+                    </a>
+                  <% }) %>
+                </div>
+              </div>
+            <% } else { %>
+              <div class="p-5 text-center">
+                <div class="empty-state">
+                  <i class="far fa-file-alt fa-4x text-muted mb-3"></i>
+                  <h5 class="mb-2">Chưa có chương</h5>
+                  <p class="text-muted mb-0">Chưa có chương nào cho sách này.</p>
+                </div>
+              </div>
+            <% } %>
+          </div>
+        </div>
+        
+        <!-- Phần đánh giá và bình luận -->
+        <div class="card shadow rounded-lg overflow-hidden border-0 mb-4">
+          <div class="card-header bg-white p-4 border-0">
+            <div class="d-flex justify-content-between align-items-center">
+              <h4 class="mb-0 fw-bold">Đánh giá và bình luận</h4>
+              <% if (user) { %>
+                <button class="btn btn-primary rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#reviewModal">
+                  <i class="fas fa-star me-2"></i> Viết đánh giá
+                </button>
+              <% } else { %>
+                <a href="/auth/login" class="btn btn-outline-primary rounded-pill px-4">
+                  <i class="fas fa-sign-in-alt me-2"></i> Đăng nhập để đánh giá
+                </a>
+              <% } %>
+            </div>
+          </div>
+          <div class="card-body p-0">
+            <% if (book.comments && book.comments.length > 0) { %>
+              <div class="reviews-list p-4">
+                <% book.comments.forEach(comment => { %>
+                  <div class="review-item mb-4 pb-4 border-bottom">
+                    <div class="d-flex">
+                      <div class="flex-shrink-0">
+                        <img src="<%= comment.user.avatar || '/uploads/users/default-avatar.jpg' %>" alt="Avatar" class="rounded-circle" width="50" height="50">
+                      </div>
+                      <div class="flex-grow-1 ms-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                          <h6 class="mb-0 fw-bold"><%= comment.user.name %></h6>
+                          <small class="text-muted"><%= new Date(comment.createdAt).toLocaleDateString('vi-VN') %></small>
+                        </div>
+                        <div class="stars mb-2">
+                          <% for(let i = 1; i <= 5; i++) { %>
+                            <i class="<%= i <= comment.rating ? 'fas' : 'far' %> fa-star text-warning small"></i>
+                          <% } %>
+                        </div>
+                        <p class="mb-0 text-muted"><%= comment.content %></p>
+                      </div>
+                    </div>
+                  </div>
+                <% }) %>
+              </div>
+            <% } else { %>
+              <div class="p-5 text-center">
+                <div class="empty-state">
+                  <i class="far fa-comment-dots fa-4x text-muted mb-3"></i>
+                  <h5 class="mb-2">Chưa có đánh giá</h5>
+                  <p class="text-muted mb-0">Hãy là người đầu tiên đánh giá cuốn sách này!</p>
+                </div>
+              </div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Sidebar -->
+      <div class="col-lg-4">
+        <!-- Sách liên quan -->
+        <div class="card shadow rounded-lg overflow-hidden border-0 mb-4">
+          <div class="card-header bg-white p-4 border-0">
+            <h4 class="mb-0 fw-bold">Sách cùng thể loại</h4>
+          </div>
+          <div class="card-body p-0">
+            <% if (relatedBooks && relatedBooks.length > 0) { %>
+              <div class="related-books">
+                <% relatedBooks.forEach(related => { %>
+                  <div class="related-book-item">
+                    <a href="/books/<%= related._id %>" class="d-flex text-dark text-decoration-none p-3 border-bottom">
+                      <div class="flex-shrink-0">
+                        <img src="<%= related.cover %>" alt="<%= related.title %>" class="img-fluid rounded shadow-sm" style="width: 80px; height: 120px; object-fit: cover;">
+                      </div>
+                      <div class="flex-grow-1 ms-3">
+                        <h5 class="mb-1 fw-medium"><%= related.title %></h5>
+                        <p class="text-muted small mb-2"><%= related.author %></p>
+                        <div class="stars mb-2">
+                          <% for(let i = 1; i <= 5; i++) { %>
+                            <i class="<%= i <= Math.round(related.rating) ? 'fas' : 'far' %> fa-star text-warning small"></i>
+                          <% } %>
+                          <span class="ms-1 small"><%= related.rating.toFixed(1) %></span>
+                        </div>
+                        <p class="text-truncate small text-muted mb-0">
+                          <%= related.description.substring(0, 80) %>...
+                        </p>
+                      </div>
+                    </a>
+                  </div>
+                <% }) %>
+              </div>
+            <% } else { %>
+              <div class="p-4 text-center">
+                <p class="text-muted mb-0">Không tìm thấy sách liên quan.</p>
+              </div>
+            <% } %>
+          </div>
+        </div>
+        
+        <!-- Thống kê sách -->
+        <div class="card shadow rounded-lg overflow-hidden border-0 mb-4">
+          <div class="card-header bg-white p-4 border-0">
+            <h4 class="mb-0 fw-bold">Thống kê</h4>
+          </div>
+          <div class="card-body">
+            <div class="stats-list">
+              <div class="stat-item d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
+                <div class="d-flex align-items-center">
+                  <div class="stat-icon bg-primary bg-opacity-10 text-primary rounded-circle p-2 me-3">
+                    <i class="fas fa-book"></i>
+                  </div>
+                  <span>Số trang</span>
+                </div>
+                <span class="fw-medium"><%= book.pages %> trang</span>
+              </div>
+              <div class="stat-item d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
+                <div class="d-flex align-items-center">
+                  <div class="stat-icon bg-success bg-opacity-10 text-success rounded-circle p-2 me-3">
+                    <i class="fas fa-eye"></i>
+                  </div>
+                  <span>Lượt xem</span>
+                </div>
+                <span class="fw-medium"><%= book.views.toLocaleString('vi-VN') %></span>
+              </div>
+              <div class="stat-item d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
+                <div class="d-flex align-items-center">
+                  <div class="stat-icon bg-info bg-opacity-10 text-info rounded-circle p-2 me-3">
+                    <i class="fas fa-list-ol"></i>
+                  </div>
+                  <span>Số chương</span>
+                </div>
+                <span class="fw-medium"><%= chapters ? chapters.length : 0 %> chương</span>
+              </div>
+              <div class="stat-item d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
+                <div class="d-flex align-items-center">
+                  <div class="stat-icon bg-warning bg-opacity-10 text-warning rounded-circle p-2 me-3">
+                    <i class="fas fa-star"></i>
+                  </div>
+                  <span>Đánh giá</span>
+                </div>
+                <span class="fw-medium"><%= book.rating.toFixed(1) %>/5 (<%= book.comments ? book.comments.length : 0 %>)</span>
+              </div>
+              <div class="stat-item d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                  <div class="stat-icon bg-danger bg-opacity-10 text-danger rounded-circle p-2 me-3">
+                    <i class="fas fa-calendar-alt"></i>
+                  </div>
+                  <span>Ngày phát hành</span>
+                </div>
+                <span class="fw-medium"><%= new Date(book.publishDate).toLocaleDateString('vi-VN') %></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Báo cáo -->
+        <div class="card shadow rounded-lg overflow-hidden border-0">
+          <div class="card-body p-4">
+            <div class="d-flex align-items-center">
+              <div class="flex-shrink-0">
+                <div class="stat-icon bg-danger bg-opacity-10 text-danger rounded-circle p-3">
+                  <i class="fas fa-flag"></i>
+                </div>
+              </div>
+              <div class="flex-grow-1 ms-3">
+                <h5 class="mb-1">Báo cáo lỗi</h5>
+                <p class="text-muted small mb-2">Phát hiện lỗi trong nội dung sách?</p>
+                <button class="btn btn-outline-danger btn-sm rounded-pill px-3">
+                  <i class="fas fa-flag me-2"></i> Báo cáo ngay
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal đánh giá -->
+<% if (user) { %>
+<div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header bg-light">
+        <h5 class="modal-title" id="reviewModalLabel">Đánh giá sách "<%= book.title %>"</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4">
+        <form id="reviewForm" action="/books/<%= book._id %>/review" method="POST">
+          <div class="mb-4 text-center">
+            <label class="form-label fw-medium">Đánh giá của bạn:</label>
+            <div class="rating-input my-3">
+              <div class="stars">
+                <% for(let i = 1; i <= 5; i++) { %>
+                  <i class="far fa-star rating-star fs-1" data-rating="<%= i %>"></i>
+                <% } %>
+              </div>
+              <input type="hidden" name="rating" id="rating-value" value="0">
+            </div>
+          </div>
+          <div class="mb-4">
+            <label for="review-content" class="form-label fw-medium">Nội dung đánh giá:</label>
+            <textarea class="form-control" id="review-content" name="content" rows="4" placeholder="Chia sẻ suy nghĩ của bạn về cuốn sách này..."></textarea>
+          </div>
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary btn-lg rounded-pill">Gửi đánh giá</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<% } %>
+
+<style>
+  .book-detail-page {
+    background-color: #f8f9fa;
+  }
+  
+  .book-cover {
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+  }
+  
+  .book-cover:hover {
+    transform: translateY(-5px);
+  }
+  
+  .book-status {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #fff;
+    z-index: 10;
+  }
+  
+  .book-status.completed {
+    background-color: #28a745;
+  }
+  
+  .book-status.ongoing {
+    background-color: #ffc107;
+    color: #212529;
+  }
+  
+  .book-status.coming {
+    background-color: #17a2b8;
+  }
+  
+  .book-title {
+    color: #343a40;
+    line-height: 1.2;
+  }
+  
+  .section-title {
+    color: #343a40;
+    font-weight: 600;
+  }
+  
+  .stars .fa-star {
+    color: #ffc107;
+    margin-right: 2px;
+  }
+  
+  .stars .far.fa-star {
+    color: #e0e0e0;
+  }
+  
+  .rating-input .rating-star {
+    cursor: pointer;
+    margin-right: 10px;
+    transition: all 0.2s;
+  }
+  
+  .rating-input .rating-star:hover {
+    color: #ffc107;
+    transform: scale(1.2);
+  }
+  
+  .chapter-list-container {
+    max-height: 600px;
+    overflow-y: auto;
+  }
+  
+  .chapter-list-container::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .chapter-list-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  .chapter-list-container::-webkit-scrollbar-thumb {
+    background: #ddd;
+    border-radius: 10px;
+  }
+  
+  .chapter-list-container::-webkit-scrollbar-thumb:hover {
+    background: #ccc;
+  }
+  
+  .chapter-list .list-group-item:hover {
+    background-color: #f8f9fa;
+  }
+  
+  .stat-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .empty-state {
+    padding: 30px 0;
+  }
+
+  .related-book-item:hover {
+    background-color: #f8f9fa;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Xử lý đánh giá sao
+    const ratingStars = document.querySelectorAll('.rating-star');
+    const ratingInput = document.getElementById('rating-value');
+    
+    if (ratingStars.length > 0 && ratingInput) {
+      ratingStars.forEach(star => {
+        star.addEventListener('click', function() {
+          const rating = this.getAttribute('data-rating');
+          ratingInput.value = rating;
+          
+          // Cập nhật giao diện
+          ratingStars.forEach(s => {
+            const sRating = s.getAttribute('data-rating');
+            if (sRating <= rating) {
+              s.classList.remove('far');
+              s.classList.add('fas');
+            } else {
+              s.classList.remove('fas');
+              s.classList.add('far');
+            }
+          });
+        });
+        
+        // Animation khi hover
+        star.addEventListener('mouseover', function() {
+          const rating = this.getAttribute('data-rating');
+          
+          ratingStars.forEach(s => {
+            const sRating = s.getAttribute('data-rating');
+            if (sRating <= rating) {
+              s.classList.add('text-warning');
+            }
+          });
+        });
+        
+        star.addEventListener('mouseout', function() {
+          ratingStars.forEach(s => {
+            if (s.classList.contains('fas') === false) {
+              s.classList.remove('text-warning');
+            }
+          });
+        });
+      });
+    }
+    
+    // Xử lý thêm vào sách yêu thích
+    const addFavoriteBtn = document.querySelector('.add-favorite');
+    if (addFavoriteBtn) {
+      addFavoriteBtn.addEventListener('click', function() {
+        const bookId = this.getAttribute('data-book-id');
+        
+        fetch(`/api/books/${bookId}/favorites`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            this.innerHTML = '<i class="fas fa-check me-2"></i> Đã thêm vào sách yêu thích';
+            this.classList.remove('btn-primary');
+            this.classList.add('btn-success');
+            this.disabled = true;
+            
+            // Hiển thị thông báo
+            const toast = document.createElement('div');
+            toast.className = 'position-fixed bottom-0 end-0 p-3';
+            toast.style.zIndex = '5';
+            toast.innerHTML = `
+              <div class="toast align-items-center text-white bg-success border-0 shadow" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                  <div class="toast-body">
+                    <i class="fas fa-check-circle me-2"></i> Đã thêm vào danh sách yêu thích thành công!
+                  </div>
+                  <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+              </div>
+            `;
+            document.body.appendChild(toast);
+            const toastEl = new bootstrap.Toast(toast.querySelector('.toast'));
+            toastEl.show();
+            
+            setTimeout(() => {
+              toast.remove();
+            }, 3000);
+          }
+        })
+        .catch(err => {
+          console.error('Lỗi:', err);
+          alert('Có lỗi xảy ra khi thêm vào sách yêu thích!');
+        });
+      });
+    }
+  });
+</script>
+
+<%- include('partials/footer') %> 

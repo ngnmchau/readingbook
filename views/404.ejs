@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <%- include('partials/head') %>
+  <title>Không tìm thấy trang | ReadingBook</title>
+  <style>
+    .error-container {
+      text-align: center;
+      padding: 5rem 0;
+    }
+    
+    .error-code {
+      font-size: 8rem;
+      font-weight: 800;
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+    }
+    
+    .error-message {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <%- include('partials/navbar') %>
+  
+  <div class="container">
+    <div class="error-container">
+      <div class="error-code">404</div>
+      <h1 class="error-message">Không tìm thấy trang</h1>
+      <p class="mb-4">Trang bạn đang tìm kiếm không tồn tại hoặc đã bị di chuyển.</p>
+      <a href="/" class="btn btn-primary">Quay lại trang chủ</a>
+    </div>
+  </div>
+  
+  <%- include('partials/footer') %>
+</body>
+</html> 

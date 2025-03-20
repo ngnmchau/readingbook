@@ -1,0 +1,150 @@
+<div class="content-wrapper">
+  <div class="container-fluid">
+    <!-- Tiêu đề trang -->
+    <div class="row">
+      <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+          <h4 class="mb-0">Chỉnh sửa sách</h4>
+          <div class="page-title-right">
+            <a href="/admin/books" class="btn btn-secondary">
+              <i class="fas fa-arrow-left me-1"></i> Quay lại
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form chỉnh sửa sách -->
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title mb-0">Thông tin sách</h5>
+          </div>
+          <div class="card-body">
+            <form action="/admin/books/<%= book._id %>" method="POST" enctype="multipart/form-data">
+              <input type="hidden" name="_method" value="PUT">
+              <div class="row">
+                <div class="col-md-8">
+                  <div class="mb-3">
+                    <label for="title" class="form-label">Tiêu đề <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="title" name="title" required
+                      value="<%= book.title %>">
+                    <% if (typeof errors !== 'undefined' && errors.title) { %>
+                      <div class="text-danger"><%= errors.title %></div>
+                    <% } %>
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label for="author" class="form-label">Tác giả <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="author" name="author" required
+                      value="<%= book.author %>">
+                    <% if (typeof errors !== 'undefined' && errors.author) { %>
+                      <div class="text-danger"><%= errors.author %></div>
+                    <% } %>
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label for="description" class="form-label">Mô tả <span class="text-danger">*</span></label>
+                    <textarea class="form-control" id="description" name="description" rows="6" required><%= book.description %></textarea>
+                    <% if (typeof errors !== 'undefined' && errors.description) { %>
+                      <div class="text-danger"><%= errors.description %></div>
+                    <% } %>
+                  </div>
+                  
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label for="pages" class="form-label">Số trang <span class="text-danger">*</span></label>
+                      <input type="number" class="form-control" id="pages" name="pages" required min="1"
+                        value="<%= book.pages %>">
+                      <% if (typeof errors !== 'undefined' && errors.pages) { %>
+                        <div class="text-danger"><%= errors.pages %></div>
+                      <% } %>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                      <label for="language" class="form-label">Ngôn ngữ <span class="text-danger">*</span></label>
+                      <select class="form-select" id="language" name="language" required>
+                        <option value="Tiếng Việt" <%= book.language === 'Tiếng Việt' ? 'selected' : '' %>>Tiếng Việt</option>
+                        <option value="Tiếng Anh" <%= book.language === 'Tiếng Anh' ? 'selected' : '' %>>Tiếng Anh</option>
+                        <option value="Tiếng Trung" <%= book.language === 'Tiếng Trung' ? 'selected' : '' %>>Tiếng Trung</option>
+                        <option value="Tiếng Nhật" <%= book.language === 'Tiếng Nhật' ? 'selected' : '' %>>Tiếng Nhật</option>
+                        <option value="Tiếng Hàn" <%= book.language === 'Tiếng Hàn' ? 'selected' : '' %>>Tiếng Hàn</option>
+                        <option value="Khác" <%= book.language === 'Khác' ? 'selected' : '' %>>Khác</option>
+                      </select>
+                      <% if (typeof errors !== 'undefined' && errors.language) { %>
+                        <div class="text-danger"><%= errors.language %></div>
+                      <% } %>
+                    </div>
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label for="categories" class="form-label">Thể loại <span class="text-danger">*</span></label>
+                    <select class="form-select" id="categories" name="categories" multiple required>
+                      <option value="Tiểu thuyết" <%= book.categories && book.categories.includes('Tiểu thuyết') ? 'selected' : '' %>>Tiểu thuyết</option>
+                      <option value="Văn học" <%= book.categories && book.categories.includes('Văn học') ? 'selected' : '' %>>Văn học</option>
+                      <option value="Kinh tế" <%= book.categories && book.categories.includes('Kinh tế') ? 'selected' : '' %>>Kinh tế</option>
+                      <option value="Tài chính" <%= book.categories && book.categories.includes('Tài chính') ? 'selected' : '' %>>Tài chính</option>
+                      <option value="Kỹ năng sống" <%= book.categories && book.categories.includes('Kỹ năng sống') ? 'selected' : '' %>>Kỹ năng sống</option>
+                      <option value="Tâm lý" <%= book.categories && book.categories.includes('Tâm lý') ? 'selected' : '' %>>Tâm lý</option>
+                      <option value="Khoa học" <%= book.categories && book.categories.includes('Khoa học') ? 'selected' : '' %>>Khoa học</option>
+                      <option value="Lịch sử" <%= book.categories && book.categories.includes('Lịch sử') ? 'selected' : '' %>>Lịch sử</option>
+                      <option value="Kỹ năng" <%= book.categories && book.categories.includes('Kỹ năng') ? 'selected' : '' %>>Kỹ năng</option>
+                      <option value="Thiếu nhi" <%= book.categories && book.categories.includes('Thiếu nhi') ? 'selected' : '' %>>Thiếu nhi</option>
+                    </select>
+                    <small class="text-muted">Giữ phím Ctrl để chọn nhiều thể loại</small>
+                    <% if (typeof errors !== 'undefined' && errors.categories) { %>
+                      <div class="text-danger"><%= errors.categories %></div>
+                    <% } %>
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label for="publishDate" class="form-label">Ngày xuất bản</label>
+                    <input type="date" class="form-control" id="publishDate" name="publishDate"
+                      value="<%= new Date(book.publishDate).toISOString().split('T')[0] %>">
+                  </div>
+                  
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label for="rating" class="form-label">Đánh giá</label>
+                      <input type="number" class="form-control" id="rating" name="rating" step="0.1" min="0" max="5"
+                        value="<%= book.rating %>">
+                      <small class="text-muted">Thang điểm từ 0 đến 5</small>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                      <label for="views" class="form-label">Lượt xem</label>
+                      <input type="number" class="form-control" id="views" name="views" min="0"
+                        value="<%= book.views %>">
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="col-md-4">
+                  <div class="mb-4">
+                    <label for="cover" class="form-label">Ảnh bìa sách</label>
+                    <div class="text-center mb-3">
+                      <img id="cover-preview" src="<%= book.cover %>" 
+                           class="img-thumbnail" style="width: 200px; height: 280px; object-fit: cover;">
+                    </div>
+                    <input type="file" class="form-control custom-file-input" id="cover" name="cover" accept="image/*"
+                           data-preview="#cover-preview">
+                    <small class="text-muted">Để trống nếu không muốn thay đổi ảnh bìa</small>
+                    <% if (typeof errors !== 'undefined' && errors.cover) { %>
+                      <div class="text-danger"><%= errors.cover %></div>
+                    <% } %>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mt-4 text-end">
+                <button type="reset" class="btn btn-secondary me-2">Làm lại</button>
+                <button type="submit" class="btn btn-primary">Cập nhật</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

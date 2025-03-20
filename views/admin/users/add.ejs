@@ -1,0 +1,11 @@
+
+
+<%- include('../layouts/admin-layout', {
+  title: 'Thêm người dùng',
+  breadcrumbs: [
+    { name: 'Trang chủ', url: '/admin' },
+    { name: 'Quản lý người dùng', url: '/admin/users' },
+    { name: 'Thêm người dùng', active: true }
+  ],
+  content: include('./add-content.ejs')
+}) %> 

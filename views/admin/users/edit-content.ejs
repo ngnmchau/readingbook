@@ -1,0 +1,97 @@
+<div class="content-wrapper">
+  <div class="container-fluid">
+    <!-- Tiêu đề trang -->
+    <div class="row">
+      <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+          <h4 class="mb-0">Chỉnh sửa người dùng</h4>
+          <div class="page-title-right">
+            <a href="/admin/users" class="btn btn-secondary">
+              <i class="fas fa-arrow-left me-1"></i> Quay lại
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form chỉnh sửa người dùng -->
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title mb-0">Thông tin người dùng</h5>
+          </div>
+          <div class="card-body">
+            <form action="/admin/users/<%= user._id %>" method="POST" enctype="multipart/form-data">
+              <input type="hidden" name="_method" value="PUT">
+              <div class="row">
+                <div class="col-md-8">
+                  <div class="mb-3">
+                    <label for="name" class="form-label">Họ tên <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="name" name="name" required
+                      value="<%= user.name %>">
+                    <% if (typeof errors !== 'undefined' && errors.name) { %>
+                      <div class="text-danger"><%= errors.name %></div>
+                    <% } %>
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                    <input type="email" class="form-control" id="email" name="email" required
+                      value="<%= user.email %>">
+                    <% if (typeof errors !== 'undefined' && errors.email) { %>
+                      <div class="text-danger"><%= errors.email %></div>
+                    <% } %>
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label for="password" class="form-label">Mật khẩu</label>
+                    <input type="password" class="form-control" id="password" name="password">
+                    <small class="text-muted">Để trống nếu không muốn thay đổi mật khẩu</small>
+                    <% if (typeof errors !== 'undefined' && errors.password) { %>
+                      <div class="text-danger"><%= errors.password %></div>
+                    <% } %>
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label for="confirmPassword" class="form-label">Xác nhận mật khẩu</label>
+                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword">
+                    <% if (typeof errors !== 'undefined' && errors.confirmPassword) { %>
+                      <div class="text-danger"><%= errors.confirmPassword %></div>
+                    <% } %>
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label for="role" class="form-label">Vai trò</label>
+                    <select class="form-select" id="role" name="role">
+                      <option value="user" <%= user.role === 'user' ? 'selected' : '' %>>Người dùng</option>
+                      <option value="admin" <%= user.role === 'admin' ? 'selected' : '' %>>Quản trị viên</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div class="col-md-4">
+                  <div class="mb-3">
+                    <label for="avatar" class="form-label">Ảnh đại diện</label>
+                    <div class="text-center mb-3">
+                      <img id="avatar-preview" src="<%= user.avatar || '/uploads/users/default-avatar.jpg' %>" 
+                           class="img-thumbnail rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                    </div>
+                    <input type="file" class="form-control custom-file-input" id="avatar" name="avatar" accept="image/*"
+                           data-preview="#avatar-preview">
+                    <small class="text-muted">Để trống nếu không muốn thay đổi ảnh</small>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mt-4 text-end">
+                <button type="reset" class="btn btn-secondary me-2">Làm lại</button>
+                <button type="submit" class="btn btn-primary">Cập nhật</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

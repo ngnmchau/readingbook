@@ -1,0 +1,131 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --primary-color: #7209b7;
+    --secondary-color: #3a0ca3;
+    --accent-color: #4cc9f0;
+    --text-color: #333;
+    --light-text: #6c757d;
+    --bg-color: #f8f9fa;
+    --card-bg: #ffffff;
+    --border-color: #e9ecef;
+    --shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    --transition: all 0.3s ease;
+  }
+  
+  body {
+    font-family: 'Nunito', sans-serif;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .navbar {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    background-color: #ffffff !important;
+  }
+  
+  .navbar-brand {
+    font-weight: 800;
+    color: var(--primary-color);
+  }
+  
+  .nav-link {
+    font-weight: 600;
+    color: var(--text-color);
+  }
+  
+  .nav-link:hover {
+    color: var(--primary-color);
+  }
+  
+  .btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+  }
+  
+  .btn-primary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+  }
+  
+  .btn-outline-primary {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+  }
+  
+  .btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+  }
+  
+  .footer {
+    margin-top: auto;
+    background-color: #f8f9fa;
+    border-top: 1px solid var(--border-color);
+    padding: 2rem 0;
+  }
+  
+  .footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+  }
+  
+  .footer a:hover {
+    text-decoration: underline;
+  }
+  
+  .user-menu {
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    color: var(--text-color);
+    padding: 0.5rem 1rem;
+  }
+  
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-right: 8px;
+    object-fit: cover;
+  }
+  
+  .container {
+    max-width: 1200px;
+    padding: 0 15px;
+  }
+  
+  .alert {
+    border-radius: 10px;
+  }
+  
+  .form-control, .input-group-text, .btn {
+    border-radius: 0.5rem;
+  }
+  
+  .form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(114, 9, 183, 0.25);
+  }
+</style>
+
+<% if (typeof page !== 'undefined') { %>
+  <% if (page === 'auth') { %>
+    <link rel="stylesheet" href="/css/auth.css">
+  <% } else if (page === 'library') { %>
+    <link rel="stylesheet" href="/css/library.css">
+  <% } %>
+<% } %>
+
+<% if (typeof readerPage !== 'undefined' && readerPage) { %>
+  <link rel="stylesheet" href="/css/reader.css">
+<% } %> 

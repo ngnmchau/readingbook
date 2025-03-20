@@ -1,0 +1,196 @@
+<%- include('partials/head', { title }) %>
+<%- include('partials/navbar') %>
+
+<div class="py-5 favorites-page">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-10">
+        <div class="card shadow-sm border-0 rounded-lg overflow-hidden mb-4">
+          <div class="card-header bg-white p-4 border-0">
+            <div class="d-flex justify-content-between align-items-center">
+              <h2 class="mb-0 fw-bold">Sách yêu thích của tôi</h2>
+              <div class="d-flex align-items-center">
+                <% if (user && user.favorites && user.favorites.length > 0) { %>
+                  <span class="badge bg-primary rounded-pill px-3 py-2"><%= user.favorites.length %> cuốn</span>
+                <% } %>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-body p-0">
+            <% if (user && user.favorites && user.favorites.length > 0) { %>
+              <div class="row g-0">
+                <% favorites.forEach(book => { %>
+                  <div class="col-md-6 border-bottom border-end position-relative favorite-book-item">
+                    <div class="d-flex p-4">
+                      <div class="flex-shrink-0">
+                        <a href="/books/<%= book._id %>" class="book-cover-link">
+                          <img src="<%= book.cover %>" alt="<%= book.title %>" class="img-fluid rounded shadow-sm" style="width: 120px; height: 180px; object-fit: cover;">
+                        </a>
+                      </div>
+                      <div class="flex-grow-1 ms-4">
+                        <h5 class="mb-1 fw-bold">
+                          <a href="/books/<%= book._id %>" class="text-decoration-none text-dark"><%= book.title %></a>
+                        </h5>
+                        <p class="text-muted mb-2"><%= book.author %></p>
+                        
+                        <div class="book-rating mb-3">
+                          <div class="stars d-inline-flex align-items-center">
+                            <% for(let i = 1; i <= 5; i++) { %>
+                              <i class="<%= i <= Math.round(book.rating) ? 'fas' : 'far' %> fa-star text-warning"></i>
+                            <% } %>
+                            <span class="ms-2 text-muted small"><%= book.rating.toFixed(1) %>/5</span>
+                          </div>
+                        </div>
+                        
+                        <div class="book-categories mb-3">
+                          <% book.categories.forEach(category => { %>
+                            <span class="badge bg-light text-dark rounded-pill me-1 mb-1"><%= category %></span>
+                          <% }) %>
+                        </div>
+                        
+                        <div class="book-actions">
+                          <a href="/books/<%= book._id %>" class="btn btn-sm btn-primary rounded-pill me-2">
+                            <i class="fas fa-info-circle me-1"></i> Chi tiết
+                          </a>
+                          <% if (book.chapters && book.chapters.length > 0) { %>
+                            <a href="/reader/<%= book.chapters[0]._id %>" class="btn btn-sm btn-success rounded-pill me-2">
+                              <i class="fas fa-book-open me-1"></i> Đọc ngay
+                            </a>
+                          <% } %>
+                          <button class="btn btn-sm btn-outline-danger rounded-pill remove-favorite" data-book-id="<%= book._id %>">
+                            <i class="fas fa-trash-alt me-1"></i> Xóa
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                <% }) %>
+              </div>
+            <% } else { %>
+              <div class="p-5 text-center">
+                <div class="empty-state">
+                  <i class="far fa-heart fa-4x text-muted mb-3"></i>
+                  <h4 class="mb-2">Chưa có sách yêu thích</h4>
+                  <p class="text-muted mb-4">Bạn chưa thêm sách nào vào danh sách yêu thích</p>
+                  <a href="/library" class="btn btn-primary rounded-pill px-4 py-2">
+                    <i class="fas fa-book me-2"></i> Khám phá thư viện sách
+                  </a>
+                </div>
+              </div>
+            <% } %>
+          </div>
+        </div>
+        
+        <% if (user && user.favorites && user.favorites.length > 0) { %>
+          <div class="text-center mt-4">
+            <p class="text-muted mb-0">Bạn có muốn khám phá thêm sách?</p>
+            <a href="/library" class="btn btn-outline-primary rounded-pill mt-3 px-4 py-2">
+              <i class="fas fa-book me-2"></i> Tiếp tục khám phá thư viện
+            </a>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .favorites-page {
+    background-color: #f8f9fa;
+    min-height: 80vh;
+  }
+  
+  .favorite-book-item {
+    transition: all 0.3s ease;
+  }
+  
+  .favorite-book-item:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+  }
+  
+  .book-cover-link {
+    display: block;
+    transition: transform 0.3s;
+  }
+  
+  .book-cover-link:hover {
+    transform: scale(1.05);
+  }
+  
+  .empty-state {
+    padding: 50px 0;
+  }
+  
+  .fa-heart {
+    color: #dc3545;
+    opacity: 0.5;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Xử lý xóa sách khỏi danh sách yêu thích
+    const removeBtns = document.querySelectorAll('.remove-favorite');
+    
+    removeBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+        const bookId = this.getAttribute('data-book-id');
+        const bookItem = this.closest('.favorite-book-item');
+        
+        if (confirm('Bạn có chắc muốn xóa sách này khỏi danh sách yêu thích?')) {
+          fetch(`/api/books/${bookId}/favorites`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+          .then(res => res.json())
+          .then(data => {
+            if (data.success) {
+              // Animate hiding the element
+              bookItem.style.opacity = '0';
+              setTimeout(() => {
+                bookItem.style.display = 'none';
+                
+                // Check if no books left
+                const remainingBooks = document.querySelectorAll('.favorite-book-item');
+                if (remainingBooks.length === 1) { // This is the last one
+                  location.reload(); // Reload to show empty state
+                }
+              }, 300);
+              
+              // Show toast
+              const toast = document.createElement('div');
+              toast.className = 'position-fixed bottom-0 end-0 p-3';
+              toast.style.zIndex = '5';
+              toast.innerHTML = `
+                <div class="toast align-items-center text-white bg-success border-0 shadow" role="alert" aria-live="assertive" aria-atomic="true">
+                  <div class="d-flex">
+                    <div class="toast-body">
+                      <i class="fas fa-check-circle me-2"></i> Đã xóa sách khỏi danh sách yêu thích!
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                  </div>
+                </div>
+              `;
+              document.body.appendChild(toast);
+              const toastEl = new bootstrap.Toast(toast.querySelector('.toast'));
+              toastEl.show();
+              
+              setTimeout(() => {
+                toast.remove();
+              }, 3000);
+            }
+          })
+          .catch(err => {
+            console.error('Lỗi:', err);
+            alert('Có lỗi xảy ra khi xóa sách khỏi danh sách yêu thích!');
+          });
+        }
+      });
+    });
+  });
+</script>
+
+<%- include('partials/footer') %> 

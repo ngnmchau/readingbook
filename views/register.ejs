@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng ký | Bookverse</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/auth.css">
+  
+  <style>
+    :root {
+      --primary-color: #7209b7;
+      --secondary-color: #3a0ca3;
+      --accent-color: #4cc9f0;
+      --text-color: #333;
+      --light-text: #6c757d;
+      --bg-color: #f8f9fa;
+      --card-bg: #ffffff;
+      --border-color: #e9ecef;
+      --shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+      --transition: all 0.3s ease;
+    }
+    
+    body {
+      font-family: 'Nunito', sans-serif;
+      color: var(--text-color);
+      background-color: var(--bg-color);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 0;
+    }
+    
+    .auth-page {
+      width: 100%;
+      max-width: 450px;
+      padding: 0 15px;
+    }
+    
+    .logo-container {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .logo-container h1 {
+      font-weight: 800;
+      color: var(--primary-color);
+      margin: 0;
+      font-size: 2.5rem;
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+    
+    .btn-primary:hover {
+      background-color: var(--secondary-color);
+      border-color: var(--secondary-color);
+    }
+    
+    .btn-outline-primary {
+      color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+    
+    .btn-outline-primary:hover {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-page">
+    <div class="logo-container">
+      <h1>Bookverse</h1>
+    </div>
+    
+    <div class="auth-card">
+      <div class="auth-header">
+        <h2>Đăng ký tài khoản</h2>
+        <p>Tạo tài khoản để trải nghiệm đầy đủ tính năng</p>
+      </div>
+      
+      <% if (typeof error !== 'undefined' && error) { %>
+        <div class="alert alert-danger" role="alert">
+          <%= error %>
+        </div>
+      <% } %>
+      
+      <form class="auth-form" action="/auth/register" method="POST">
+        <div class="mb-3">
+          <label for="name" class="form-label">Họ tên</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-user"></i></span>
+            <input type="text" class="form-control" id="name" name="name" value="<%= typeof name !== 'undefined' ? name : '' %>" required>
+          </div>
+        </div>
+        
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+            <input type="email" class="form-control" id="email" name="email" value="<%= typeof email !== 'undefined' ? email : '' %>" required>
+          </div>
+        </div>
+        
+        <div class="mb-3">
+          <label for="password" class="form-label">Mật khẩu</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+            <input type="password" class="form-control" id="password" name="password" required minlength="6">
+            <button class="btn btn-outline-secondary toggle-password" type="button">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <small class="form-text text-muted">Mật khẩu phải có ít nhất 6 ký tự</small>
+        </div>
+        
+        <div class="mb-3">
+          <label for="confirmPassword" class="form-label">Xác nhận mật khẩu</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+            <button class="btn btn-outline-secondary toggle-password" type="button">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+        </div>
+        
+        <div class="mb-3 form-check">
+          <input type="checkbox" class="form-check-input" id="agreeTerms" name="agreeTerms" required>
+          <label class="form-check-label" for="agreeTerms">
+            Tôi đồng ý với <a href="/terms">Điều khoản sử dụng</a> và <a href="/privacy">Chính sách bảo mật</a>
+          </label>
+        </div>
+        
+        <div class="d-grid">
+          <button type="submit" class="btn btn-primary">Đăng ký</button>
+        </div>
+      </form>
+      
+      <div class="auth-divider">
+        <span>hoặc đăng ký với</span>
+      </div>
+      
+      <div class="social-login">
+        <button class="btn btn-outline-primary social-btn">
+          <i class="fab fa-facebook-f"></i>
+          <span>Facebook</span>
+        </button>
+        <button class="btn btn-outline-danger social-btn">
+          <i class="fab fa-google"></i>
+          <span>Google</span>
+        </button>
+      </div>
+      
+      <div class="auth-footer">
+        Bạn đã có tài khoản? <a href="/auth/login">Đăng nhập</a>
+      </div>
+      
+      <div class="text-center mt-4">
+        <a href="/" class="text-decoration-none">
+          <i class="fas fa-arrow-left me-1"></i> Quay lại trang chủ
+        </a>
+      </div>
+    </div>
+  </div>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/auth.js"></script>
+</body>
+</html>
