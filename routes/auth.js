@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const passport = require('passport');
+
 const {
   getRegisterForm,
   register,
@@ -29,4 +31,25 @@ router.get('/logout', logout);
 router.get('/forgot-password', getForgotPasswordForm);
 router.post('/forgot-password', forgotPassword);
 
+// Route đăng nhập với Google
+router.get('/login/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+// Route callback từ Google
+router.get('/login/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/' }),
+  (req, res) => {
+    res.redirect('/me'); // Điều hướng về trang cá nhân sau khi đăng nhập
+  }
+);
+
+// Route đăng nhập với Facebook
+router.get('/login/facebook', passport.authenticate('facebook', { scope: ['email'] }));
+
+// Route callback từ Facebook
+router.get('/facebook/callback', 
+  passport.authenticate('facebook', { failureRedirect: '/' }),
+  (req, res) => {
+    res.redirect('/me'); // Điều hướng về trang cá nhân sau khi đăng nhập
+  }
+);
 module.exports = router; 
