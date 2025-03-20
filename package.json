@@ -7,9 +7,13 @@
     "ejs": "^3.1.8",
     "express": "^4.21.2",
     "express-flash": "^0.0.2",
+    "express-session": "^1.18.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^6.13.8",
-    "multer": "^1.4.5-lts.1"
+    "multer": "^1.4.5-lts.1",
+    "passport": "^0.7.0",
+    "passport-facebook": "^3.0.0",
+    "passport-google-oauth20": "^2.0.0"
   },
   "scripts": {
     "start": "node app.js",
