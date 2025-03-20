@@ -1,9 +1,13 @@
+
 const express = require('express');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
 const connectDB = require('./config/db');
 const path = require('path');
 const fs = require('fs');
+const passport = require('passport');
+const session = require('express-session');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 // Load env vars
 dotenv.config({ path: './config/config.env' });
@@ -17,15 +21,69 @@ const BlogPost = require('./models/Blog');
 
 const app = express();
 
+
 // Body parser
+
+// Middleware Body parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Cookie parser
 app.use(cookieParser());
 
+
 // Set EJS as templating engine
 app.set('view engine', 'ejs');
+// Cấu hình session
+app.use(
+  session({
+    secret: 'your_secret_key',
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+
+// Khởi tạo Passport
+app.use(passport.initialize());
+app.use(passport.session());
+require('./config/passport'); // Đảm bảo bạn đã cấu hình passport.js
+// Cấu hình Passport Google OAuth
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: '/auth/google/callback',
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      try {
+        let user = await User.findOne({ googleId: profile.id });
+
+        if (!user) {
+          user = await User.create({
+            googleId: profile.id,
+            name: profile.displayName,
+            email: profile.emails[0].value,
+            avatar: profile.photos[0].value,
+          });
+        }
+
+        return done(null, user);
+      } catch (err) {
+        return done(err, null);
+      }
+    }
+  )
+);
+
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+  const user = await User.findById(id);
+  done(null, user);
+});
 
 // Đảm bảo các thư mục uploads tồn tại
 const uploadDirs = [
